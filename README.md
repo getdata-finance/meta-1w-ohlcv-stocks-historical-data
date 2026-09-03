@@ -4,7 +4,7 @@
 
 ### -> [**Download the full META dataset on getdata.finance**](https://getdata.finance/datasets/meta)
 
-**META 1w OHLCV stocks historical data** — ultra high-quality 1w OHLCV for **Meta Platforms**. Clean `time, open, high, low, close, volume` CSV for backtesting, algorithmic trading and quantitative research.
+**META 1w OHLCV stocks historical data** — ultra high-quality 1w OHLCV for **Meta Platforms**. Clean `datetime, open, high, low, close, volume` CSV for backtesting, algorithmic trading and quantitative research.
 
 ## Table of contents
 
@@ -22,12 +22,12 @@
 ## Why this dataset?
 
 - **Ultra high-quality 1w OHLCV** for **Meta Platforms** (US stocks)
-- **Clean CSV schema** — `time, open, high, low, close, volume` (no gaps in formatting)
+- **Clean CSV schema** — `datetime, open, high, low, close, volume` (no gaps in formatting)
 - **Free evaluation sample** on GitHub (`1w`) · **11 timeframes** on [getdata.finance](https://getdata.finance/datasets/meta) · **746** `1w` rows in the full archive
 - Built for **backtesting**, **algorithmic trading** and **quantitative finance** workflows
 - **Weekly refresh** — [getdata.finance](https://getdata.finance) every **Saturday, 8am UTC+0**; GitHub `1w` sample updated in sync
 
-> **Sample on GitHub** · `META_1w.csv` (29 rows, `2026-02-12` -> `2026-08-27`, 1.79 KB). **Full archive on [getdata.finance](https://getdata.finance/datasets/meta)** — **746** `1w` rows (full `1m`: 637,227), **11 timeframes**, `2012-05-17` -> `2026-08-27`.
+> **Sample on GitHub** · `META_1w.csv` (29 rows, `2026-02-12` -> `2026-08-27`, 1.80 KB). **Full archive on [getdata.finance](https://getdata.finance/datasets/meta)** — **746** `1w` rows (full `1m`: 637,227), **11 timeframes**, `2012-05-17` -> `2026-08-27`.
 
 ## Download sample
 
@@ -46,7 +46,7 @@ Full archive & live chart on getdata.finance: **[https://getdata.finance/dataset
 | Instrument | Meta Platforms · US stocks | Meta Platforms · US stocks |
 | Timeframes | `1w` (sample) | **11** — 1m · 3m · 5m · 15m · 30m · 1H · 4H · 12H · 1D · 3D · 1W |
 | 1w rows | 29 | **746** |
-| Size | 1.79 KB | full ZIP on [getdata.finance](https://getdata.finance/datasets/meta) |
+| Size | 1.80 KB | full ZIP on [getdata.finance](https://getdata.finance/datasets/meta) |
 | Period | `2026-02-12` -> `2026-08-27` | `2012-05-17` -> `2026-08-27` |
 | File | `META_1w.csv` | ZIP on [getdata.finance](https://getdata.finance/datasets/meta) |
 | Coverage report | — | [META coverage](https://getdata.finance/coverage/meta) |
@@ -73,7 +73,7 @@ First and latest rows from the GitHub sample **`META_1w.csv`**:
 
 **First rows**
 
-| time | open | high | low | close | volume |
+| datetime | open | high | low | close | volume |
 | --- | --- | --- | --- | --- | --- |
 | 2026-02-12T00:00:00+00:00 | 668.63 | 675.61 | 627.73 | 642.83 | 112495 |
 | 2026-02-19T00:00:00+00:00 | 642.83 | 662.9 | 628.68 | 653.34 | 114996 |
@@ -83,7 +83,7 @@ First and latest rows from the GitHub sample **`META_1w.csv`**:
 
 **Last rows**
 
-| time | open | high | low | close | volume |
+| datetime | open | high | low | close | volume |
 | --- | --- | --- | --- | --- | --- |
 | 2026-07-30T00:00:00+00:00 | 586.62 | 600.46 | 523.85 | 589.03 | 172563 |
 | 2026-08-06T00:00:00+00:00 | 589.03 | 611.94 | 577.78 | 578.66 | 118485 |
@@ -95,7 +95,7 @@ First and latest rows from the GitHub sample **`META_1w.csv`**:
 
 | Column | Description |
 | --- | --- |
-| `time` | Bar open timestamp (UTC, ISO-8601). |
+| `datetime` | Bar open timestamp (UTC, ISO-8601). |
 | `open` | Opening price of the candlestick bar. |
 | `high` | Highest price during the bar. |
 | `low` | Lowest price during the bar. |
@@ -103,7 +103,7 @@ First and latest rows from the GitHub sample **`META_1w.csv`**:
 | `volume` | Tick volume (number of price updates) during the bar. |
 
 ```text
-time,open,high,low,close,volume
+datetime,open,high,low,close,volume
 ```
 
 ## Code examples
@@ -113,8 +113,8 @@ time,open,high,low,close,volume
 ```python
 import pandas as pd
 
-df = pd.read_csv('META_1w.csv', parse_dates=['time'])
-df.set_index('time', inplace=True)
+df = pd.read_csv('META_1w.csv', parse_dates=['datetime'])
+df.set_index('datetime', inplace=True)
 print(df.describe())
 ```
 
@@ -124,8 +124,8 @@ print(df.describe())
 import backtrader as bt
 import pandas as pd
 
-df = pd.read_csv('META_1w.csv', parse_dates=['time'])
-df.set_index('time', inplace=True)
+df = pd.read_csv('META_1w.csv', parse_dates=['datetime'])
+df.set_index('datetime', inplace=True)
 
 class PandasData(bt.feeds.PandasData):
     params = (('datetime', None), ('open', 'open'), ('high', 'high'),
@@ -143,8 +143,8 @@ cerebro.adddata(PandasData(dataname=df))
 import pandas as pd
 import vectorbt as vbt
 
-df = pd.read_csv('META_1w.csv', parse_dates=['time'])
-close = df.set_index('time')['close']
+df = pd.read_csv('META_1w.csv', parse_dates=['datetime'])
+close = df.set_index('datetime')['close']
 fast, slow = vbt.MA.run(close, 10), vbt.MA.run(close, 50)
 entries = fast.ma_crossed_above(slow)
 exits = fast.ma_crossed_below(slow)
